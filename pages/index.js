@@ -1,7 +1,31 @@
+import { useAuth } from '../firebase/auth';
+
 export default function Home() {
+  const auth = useAuth();
   return (
-    <div className='p-12'>
-      <h1 className='text-teal-700 text-2xl'>Fastfeedback + Tailwindcss</h1>
+    <div>
+      {auth.user ? (
+        <div className='p-8'>
+          {auth.user.displayName}
+          <div>
+            <button
+              className='bg-black hover:bg-gray-900 py-2 px-4 text-white text-md rounded mt-2 shadow-md hover:shadow-xl transition duration-500'
+              onClick={auth.signout}
+            >
+              Signout
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className='p-8'>
+          <button
+            className='bg-black hover:bg-gray-900 py-2 px-4 text-white text-md rounded mt-2 shadow-md hover:shadow-xl transition duration-500'
+            onClick={auth.signinWithGithub}
+          >
+            Signin with Github
+          </button>
+        </div>
+      )}
     </div>
   );
 }
