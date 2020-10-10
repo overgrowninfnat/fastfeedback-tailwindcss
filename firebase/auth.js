@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import firebase from './firebase';
+import formatUser from './util/formatUser';
+import { createUser } from './firestore';
 
 const authContext = createContext();
 
@@ -14,17 +16,18 @@ export const useAuth = () => {
 
 function useProvideAuth() {
   const [user, setUser] = useState(null);
+  const [error, setError] = useState('');
   const provider = new firebase.auth.GithubAuthProvider();
 
   const signinWithGithub = () => {
     return firebase
       .auth()
       .signInWithPopup(provider)
-      .then((result) => {
-        setUser(result.user);
-        return result.user;
+      .then(({ user }) => {
+        const formattedUser = formatUser(user);
+        createUser(formattedUser.uid, formattedUser);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => setError(error));
   };
 
   const signout = () => {
@@ -32,13 +35,13 @@ function useProvideAuth() {
       .auth()
       .signOut()
       .then(() => setUser(false))
-      .catch((err) => console.log(err));
+      .catch((error) => setError(error));
   };
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        setUser(user);
+        setUser(formatUser(user));
       } else {
         setUser(false);
       }
@@ -48,6 +51,7 @@ function useProvideAuth() {
 
   return {
     user,
+    error,
     signinWithGithub,
     signout,
   };
