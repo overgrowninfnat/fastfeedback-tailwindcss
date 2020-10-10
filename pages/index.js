@@ -4,7 +4,7 @@ import { useAuth } from '../firebase/auth';
 
 export default function Home() {
   const auth = useAuth();
-  const [paid, setPaid] = useState(false);
+  const [paid, setPaid] = useState(true);
   return (
     <>
       {auth.user ? (
