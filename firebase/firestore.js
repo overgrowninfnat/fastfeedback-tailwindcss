@@ -10,3 +10,7 @@ export function createUser(uid, data) {
       { merge: true }
     );
 }
+
+export function createSite(data) {
+  return firebase.firestore().collection('sites').add(data);
+}
