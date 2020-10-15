@@ -1,7 +1,8 @@
-import FreePlanEmptyState from './FreePlanEmptyState';
-import PaidEmptyState from './PaidEmptyState';
+import { useDisclosure } from '@chakra-ui/core';
+import AddSiteModal from './AddSiteModal';
 
-export default function DashboardShell({ user, paid }) {
+export default function DashboardShell({ user, signout, children }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       {/* header */}
@@ -27,25 +28,47 @@ export default function DashboardShell({ user, paid }) {
           <a className='hidden md:inline-block' href='#'>
             Account
           </a>
-          <img
-            className='w-10 h-10 rounded-full'
-            src={user.photoUrl}
-            alt='Profile image'
-          />
+
+          {user && (
+            <>
+              <div>
+                <button onClick={signout}>Sign Out</button>
+              </div>
+              <div>
+                <img
+                  className='w-10 h-10 rounded-full'
+                  src={user.photoUrl}
+                  alt='Profile image'
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
       {/* main section */}
       <div className='bg-gray-200 h-screen py-12'>
         <div className='container mx-auto w-3/4'>
-          {/* breadcumbs + page title */}
-          <div className='text-xs font-light'>Sites</div>
-          <div className='text-3xl font-extrabold mb-6'>My Sites</div>
+          {/* breadcumbs + page title + add site button */}
+          <div className='flex justify-between'>
+            <div>
+              <div className='text-xs font-light'>Sites</div>
+              <div className='text-3xl font-extrabold mb-6'>My Sites</div>
+            </div>
+            <div>
+              <button
+                onClick={onOpen}
+                className='mt-6 bg-black text-white font-bold py-2 px-4 shadow-md hover:bg-gray-800 hover:shadow-xl transition duration-500'
+              >
+                + Add Site
+              </button>
+            </div>
+          </div>
+
           {/* box content */}
-          {paid ? <PaidEmptyState /> : <FreePlanEmptyState />}
+          {children}
         </div>
+        <AddSiteModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       </div>
-      {/* call to action */}
-      {<button></button>}
     </>
   );
 }

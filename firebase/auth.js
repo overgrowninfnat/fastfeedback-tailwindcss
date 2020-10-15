@@ -34,7 +34,9 @@ function useProvideAuth() {
     return firebase
       .auth()
       .signOut()
-      .then(() => setUser(false))
+      .then(() => (
+        setUser(false)
+        ))
       .catch((error) => setError(error));
   };
 
