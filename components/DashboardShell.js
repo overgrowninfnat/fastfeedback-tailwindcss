@@ -67,7 +67,12 @@ export default function DashboardShell({ user, signout, children }) {
           {/* box content */}
           {children}
         </div>
-        <AddSiteModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+        <AddSiteModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+      
+        />
       </div>
     </>
   );

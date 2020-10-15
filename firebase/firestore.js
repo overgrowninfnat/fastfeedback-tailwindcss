@@ -12,9 +12,11 @@ export function createUser(uid, data) {
 }
 
 export function createSite(authorId, data) {
-  return firebase.firestore().collection('sites').add({
-    authorId: authorId,
-    createdAt: new firebase.firestore.Timestamp.now().seconds,
-    ...data
-  });
+  return firebase
+    .firestore()
+    .collection('sites')
+    .add({
+      authorId: authorId,
+      ...data,
+    });
 }

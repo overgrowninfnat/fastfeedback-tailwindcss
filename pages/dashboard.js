@@ -13,7 +13,7 @@ export default function Dashboard() {
   const { data } = useSwr('/api/sites', fetcher);
   const [paid, setPaid] = useState(true);
   return (
-    <DashboardShell user={auth.user} signout={auth.signout}>
+    <DashboardShell user={auth.user} signout={auth.signout} sites={data?.sites}>
       {!auth.user ? (
         <SkeletonLoading />
       ) : paid ? (

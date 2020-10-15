@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { mutate } from 'swr';
 import { createSite } from '../firebase/firestore';
 
 import {
@@ -22,11 +23,23 @@ export default function AddSiteModal({ isOpen, onClose }) {
   const initialRef = useRef();
   const { handleSubmit, register, errors } = useForm();
   const toast = useToast();
-  const {user} = useAuth()
+  const { user } = useAuth();
 
   const onSubmit = (values) => {
-    createSite(user.uid, values).then(() => {
-      onClose();
+    onClose();
+    const newSite = {
+      createdAt: Date.now(),
+      ...values,
+    };
+    mutate(
+      '/api/sites',
+      async (data) => {
+        return { sites: [...data.sites, newSite] };
+      },
+      false
+    );
+    
+    createSite(user.uid, newSite).then(() => {
       toast({
         title: 'Site created',
         description: "We've successfully added your website",
