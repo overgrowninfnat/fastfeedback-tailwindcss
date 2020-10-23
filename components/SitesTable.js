@@ -1,4 +1,6 @@
 import format from 'date-fns/format';
+import Link from 'next/link';
+
 export default function SitesTable({ sites }) {
   return (
     <div className='w-80%'>
@@ -18,7 +20,11 @@ export default function SitesTable({ sites }) {
             <tr key={site.link}>
               <td className='border px-4 py-2 font-semibold'>{site.name}</td>
               <td className='border px-4 py-2'>{site.link}</td>
-              <td className='border px-4 py-2'>View Feedback</td>
+              <td className='border px-4 py-2 text-blue-500 hover:text-blue-800 transfom duration-500'>
+                {site.siteId ? (
+                  <Link href={`/p/${site.siteId}`}>View Feedback</Link>
+                ) : null}
+              </td>
               <td className='border px-4 py-2'>
                 {format(site.createdAt, 'dd-MM-yy')}
               </td>

@@ -3,7 +3,7 @@ import AddSiteModal from './AddSiteModal';
 import MainBox from './MainBox';
 import SitesTable from './SitesTable';
 
-export default function FreePlanEmptyState({ sites }) {
+export default function PaidState({ sites }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (

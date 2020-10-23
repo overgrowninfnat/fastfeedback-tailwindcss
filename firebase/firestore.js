@@ -20,3 +20,12 @@ export function createSite(authorId, data) {
       ...data,
     });
 }
+
+export function createFeedback(newFeedback) {
+  return firebase
+  .firestore()
+  .collection('feedback')
+  .add({
+    ...newFeedback
+  })
+}
