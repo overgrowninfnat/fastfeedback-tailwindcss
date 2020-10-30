@@ -7,19 +7,22 @@ import PaidState from '../components/PaidState';
 import FreePlanEmptyState from '../components/FreePlanState';
 import { useAuth } from '../firebase/auth';
 import fetcher from '../utils/fetcher';
-import compare from '../firebase/util/sortByDate';
 
 export default function Dashboard() {
-  const auth = useAuth();
-  const { data } = useSwr('/api/sites', fetcher);
+  const { user, signout } = useAuth();
+  const { data } = useSwr(user ? ['/api/sites', user.token] : null, fetcher);
   const [paid, setPaid] = useState(true);
   return (
-    <DashboardShell user={auth.user} signout={auth.signout}>
-      {!auth.user ? (
+    <DashboardShell user={user} signout={signout}>
+      {!user ? (
         <SkeletonLoading />
       ) : paid ? (
         <div>
-          {data ? <PaidState sites={data.sites.sort(compare)} /> : <SkeletonLoading />}
+          {data ? (
+            <PaidState sites={data.sites !== undefined && data.sites} />
+          ) : (
+            <SkeletonLoading />
+          )}
         </div>
       ) : (
         <FreePlanEmptyState />

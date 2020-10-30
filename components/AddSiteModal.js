@@ -32,13 +32,13 @@ export default function AddSiteModal({ isOpen, onClose }) {
       ...values,
     };
     mutate(
-      '/api/sites',
+      ['/api/sites', user.token],
       async (data) => {
         return { sites: [...data.sites, newSite] };
       },
       false
     );
-    
+
     createSite(user.uid, newSite).then(() => {
       toast({
         title: 'Site created',

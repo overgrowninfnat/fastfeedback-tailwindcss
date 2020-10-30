@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import firebase from './firebase';
 import formatUser from './util/formatUser';
 import { createUser } from './firestore';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const authContext = createContext();
 
@@ -18,6 +20,7 @@ function useProvideAuth() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const provider = new firebase.auth.GithubAuthProvider();
+  const router = useRouter();
 
   const signinWithGithub = () => {
     return firebase
@@ -25,7 +28,8 @@ function useProvideAuth() {
       .signInWithPopup(provider)
       .then(({ user }) => {
         const formattedUser = formatUser(user);
-        createUser(formattedUser.uid, formattedUser);
+        const { token, ...userWithoutToken } = formattedUser;
+        createUser(formattedUser.uid, userWithoutToken);
       })
       .catch((error) => setError(error));
   };
@@ -34,9 +38,11 @@ function useProvideAuth() {
     return firebase
       .auth()
       .signOut()
-      .then(() => (
-        setUser(false)
-        ))
+      .then(
+        () => (
+          Cookies.remove('easy-feedback-auth'), setUser(false), router.push('/')
+        )
+      )
       .catch((error) => setError(error));
   };
 
@@ -44,6 +50,9 @@ function useProvideAuth() {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         setUser(formatUser(user));
+        Cookies.set('easy-feedback-auth', true, {
+          expires: 1,
+        });
       } else {
         setUser(false);
       }

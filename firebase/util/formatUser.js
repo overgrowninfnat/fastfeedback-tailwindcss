@@ -5,5 +5,6 @@ export default function formatUser(rawUser) {
     email: rawUser.email,
     photoUrl: rawUser.photoURL,
     provider: rawUser.providerData[0].providerId,
+    token: rawUser.xa,
   };
 }

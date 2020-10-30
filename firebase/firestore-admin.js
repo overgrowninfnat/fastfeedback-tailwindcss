@@ -19,6 +19,20 @@ export async function getAllFeedback(siteId) {
   }
 }
 
+export async function getUserSites(userId) {
+  const snapshot = await admin
+    .firestore()
+    .collection('sites')
+    .where('authorId', '==', userId)
+    .get();
+  const unorderedSites = [];
+  snapshot.forEach((doc) => {
+    unorderedSites.push({ siteId: doc.id, ...doc.data() });
+  });
+  const sites = unorderedSites.sort(compare);
+  return sites;
+}
+
 export async function getAllSites() {
   try {
     const snapshot = await admin.firestore().collection('sites').get();
@@ -28,7 +42,6 @@ export async function getAllSites() {
     });
     return sites;
   } catch (error) {
-    console.log(error);
     return error;
   }
 }

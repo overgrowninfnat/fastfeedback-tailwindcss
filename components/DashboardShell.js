@@ -46,7 +46,7 @@ export default function DashboardShell({ user, signout, children }) {
         </div>
       </div>
       {/* main section */}
-      <div className='bg-gray-200 h-screen py-12'>
+      <div className='bg-gray-200 min-h-screen h-full py-12'>
         <div className='container mx-auto w-3/4'>
           {/* breadcumbs + page title + add site button */}
           <div className='flex justify-between'>

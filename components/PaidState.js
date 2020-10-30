@@ -5,7 +5,6 @@ import SitesTable from './SitesTable';
 
 export default function PaidState({ sites }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <>
       {sites.length ? (
