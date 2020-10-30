@@ -23,6 +23,7 @@ export async function getStaticProps(context) {
   const siteId = context.params.siteId;
   const feedback = await getAllFeedback(siteId);
   return {
+    revalidate: 1,
     props: {
       initialFeedback: feedback,
     },
